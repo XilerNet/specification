@@ -68,10 +68,10 @@ DNS example.o example. A IN 5100000000 127.0.0.1
 
 ## Extra domain data
 
-Extra domain related data get validated by this regex expression: `DOMAIN-DATA [a-z|\d]{64}i0 .+`, following the format of `DOMAIN-DATA <DOMAIN INSCRIPTION ID> <data>`. Further restrictions for domain data records can be applied by the application. 
+Extra domain related data get validated by this regex expression: `DOMAIN-DATA [a-z\d](?:[a-z\d-]{0,251}[a-z\d])?.o .+`, following the format of `DOMAIN-DATA <DOMAIN> <data>`. Further restrictions for domain data records can be applied by the application. 
 
 Some example usage:
 ```
-DOMAIN-DATA 85c3617c9ff96e22c08645b634c02fd0b5bd407dd644996e96e73c9c9b8f139fi0 extra data is present here
-DOMAIN-DATA 85c3617c9ff96e22c08645b634c02fd0b5bd407dd644996e96e73c9c9b8f139fi0 { "still_valid": true }
+DOMAIN-DATA example.o extra data is present here
+DOMAIN-DATA example.o { "still_valid": true }
 ```
