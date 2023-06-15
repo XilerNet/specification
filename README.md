@@ -70,6 +70,16 @@ DNS invalid.o example. A IN 4700000000 127.0.0.1 5bc53d9227...i0 ope6kNBBuUJi6H4
 DNS invalid.o example. A IN 5100000000 127.0.0.1 5bc53d9227...i0 ope6kNBBuUJi6H4NH...
 ```
 
+## Drop subdomains / DNS records
+
+Invalidate a dns record, does as it says. Prevents the resolver from returning the ip in a round-robin form.
+
+Its gets validated by this regex expression: `DNS-DROP [a-z\d]{64}i[0-9] \S+` which follows this format: `DNS-DROP <dns inscription id> <signature>
+
+```
+DNS-DROP 5bc53d9227...i0 ope6kNBBuUJi6H4NH...
+```
+
 ## Domain validity
 
 Since anyone can inscribe to any address, we need to verify that a dns record is issues by the owner of the wallet without sacrificing the ability to trade the domain and having to pass the domain.  
@@ -94,10 +104,10 @@ Invalidate validity regex expression: `DOMAIN-VALIDATE-TRANSFER [a-z\d](?:[a-z\d
 
 ```
 # Set no new validation public key
-DOMAIN-VALIDATE-TRANSFER example.o 5bc53d9227... ope6kNBBuUJi6H4NH...
+DOMAIN-VALIDATE-TRANSFER example.o 5bc53d9227...i0 ope6kNBBuUJi6H4NH...
 
 # Set a new validation public key
-DOMAIN-VALIDATE-TRANSFER example.o dilithium5 5bc53d9227... 1m8jUVZEffs/rP3Osiz... ope6kNBBuUJi6H4NH...
+DOMAIN-VALIDATE-TRANSFER example.o dilithium5 5bc53d9227...i0 1m8jUVZEffs/rP3Osiz... ope6kNBBuUJi6H4NH...
 ```
 
 ## Drop a domain
@@ -107,15 +117,17 @@ DOMAIN-VALIDATE-TRANSFER example.o dilithium5 5bc53d9227... 1m8jUVZEffs/rP3Osiz.
 The drop regex expression: `DOMAIN-DROP [a-z\d](?:[a-z\d-]{0,251}[a-z\d])?.o [a-z\d]{64}i[0-9] \S+` following the format: `DOMAIN-DROP <domain> <domain inscription id> <signature>` 
 
 ```
-DOMAIN-DROP example.o 5bc53d9227... ope6kNBBuUJi6H4NH...
+DOMAIN-DROP example.o 5bc53d9227...i0 ope6kNBBuUJi6H4NH...
 ```
 
 ## Extra domain data
 
-Extra domain related data get validated by this regex expression: `DOMAIN-DATA [a-z\d](?:[a-z\d-]{0,251}[a-z\d])?.o .+`, following the format of `DOMAIN-DATA <DOMAIN> <last extra data inscription id> <data>`. Further restrictions for domain data records can be applied by the application. 
+Extra domain related data get validated by this regex expression: `DOMAIN-DATA [a-z\d](?:[a-z\d-]{0,251}[a-z\d])?.o .+`, following the format of `DOMAIN-DATA <DOMAIN> <last extra data inscription id> <data> <signature>`. Further restrictions for domain data records can be applied by the application. 
 
 Some example usage:
 ```
-DOMAIN-DATA example.o 5bc53d9227... extra data is present here
-DOMAIN-DATA example.o 5bc53d9227... { "still_valid": true }
+DOMAIN-DATA example.o 5bc53d9227...i0 extra data is present here ope6kNBBuUJi6H4NH...
+
+DOMAIN-DATA example.o 5bc53d9227...i0 { "still_valid": true } ope6kNBBuUJi6H4NH...
+
 ```
