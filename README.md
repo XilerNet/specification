@@ -3,6 +3,7 @@
 A project aimed to create a usable domain name system on bitcoin ordinals. This uses the TLD `.o`. On top of that this is decentralised, it also does not align with the subscription model of current domains, and has taken a more strict approach to domains. Because of this we want to make a more secure net without having to rely on big organisations for the DNS resolution.
 
 > NOTE: In this specification when reffered to a inscription id that might not exist yet *(if it is the first inscription of its kind for the domain)* then the value `null` should be used.
+> NOTE: All queries can be chained by using a newline character *(`\n`)*.
 
 ## Domain Inscription
 
