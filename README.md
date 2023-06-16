@@ -3,7 +3,8 @@
 A project aimed to create a usable domain name system on bitcoin ordinals. This uses the TLD `.o`. On top of that this is decentralised, it also does not align with the subscription model of current domains, and has taken a more strict approach to domains. Because of this we want to make a more secure net without having to rely on big organisations for the DNS resolution.
 
 > NOTE: In this specification when reffered to a inscription id that might not exist yet *(if it is the first inscription of its kind for the domain)* then the value `null` should be used.
-> NOTE: All queries can be chained by using a newline character *(`\n`)*.
+
+> NOTE: All queries can be chained by using a newline character *(`\n`)*, if the queries are chained, the signature can be of the whole chained data, so it only needs to be provided once at the end. If you are registering a domain, and you want to add a validation pk, you can do this directly in the chained inscription and can directly sign that with the signature.
 
 ## Domain Inscription
 
@@ -35,13 +36,13 @@ DOMAIN invalid.o
 ### How is validity checked?
 
 1. Checks if the record has a valid structure
-2. Is the `valid from unix epoch` has been passed, and if it is still before the expiry date (+1 year from validity)
+2. Is the `valid from unix epoch` has been passed, and if it is still before the expiry date (+356 days from validity)
 
-If there are multiple records with the same domain name, the first one will be used. Once the first one has been expired, the wallet of the first domain will be checked, to see if a record has been bought before the first one expired. If the wallet owns such a record, that record will be seen as the adopter. If it does not, the first record created after the expiry will be seen as the adopter.
+If there are multiple records with the same domain name, the first one will be used.
 
 ## Subdomains / DNS records
 
-Your domain inscription only defines that you own a domain. No linking to a addess or record has been made here, as this would prevent you from making any change in the future. The soltion to this is to create an extra inscription and check if the walled which owns the DNS inscription also owns the first and valid domain. 
+Your domain inscription only defines that you own a domain. No linking to a addess or record has been made here, as this would prevent you from making any change in the future. The solution to this is to create an extra inscription and check if the walled which owns the DNS inscription also owns the first and valid domain. 
 
 The records get validated by this REGEX expression: `DNS [a-z\d](?:[a-z\d-]{0,251}[a-z\d])?.o [a-z\d](?:[a-z\d\.-]{1,62}[a-zd])?\. [A-Z]{1,5} [A-Z]{2} \d{1,9} \S+ [a-z\d]{64}i[0-9] \S+`, as you can see. These inscriptions are again case sensive, and restricted. This is to prevent phising attacks within the `.o` domain space. Further validation and restrictions might be applied to the RDATA dependin on the record type. *(eg a A record only allowing a ip, etc)*
 
@@ -75,7 +76,7 @@ DNS invalid.o example. A IN 5100000000 127.0.0.1 5bc53d9227...i0 ope6kNBBuUJi6H4
 
 Invalidate a dns record, does as it says. Prevents the resolver from returning the ip in a round-robin form.
 
-Its gets validated by this regex expression: `DNS-DROP [a-z\d]{64}i[0-9] \S+` which follows this format: `DNS-DROP <dns inscription id> <signature>
+Its gets validated by this regex expression: `DNS-DROP [a-z\d]{64}i[0-9] \S+` which follows this format: `DNS-DROP <dns inscription id> <signature>`
 
 ```
 DNS-DROP 5bc53d9227...i0 ope6kNBBuUJi6H4NH...
@@ -87,7 +88,7 @@ Since anyone can inscribe to any address, we need to verify that a dns record is
 
 ### Define validity
 
-This record defines the public key and its algorithm (max 32chars) for a domain. This gets used for validating a DNS record its ownership. The first detected instance (that has not been invalidated) and that is on the same address is the valid key.
+This record defines the public key and its algorithm *(max 32chars)* for a domain. This gets used for validating a DNS record its ownership. The first detected instance (that has not been invalidated) and that is on the same address is the valid key.
 
 Domain validity regex expression: `DOMAIN-VALIDITY [a-z\d](?:[a-z\d-]{0,251}[a-z\d])?.o [a-z\d]{1,32} \S+`, formatted as `DOMAIN-VALIDITY <domain> <algorithm> <public key>` 
 
@@ -123,12 +124,11 @@ DOMAIN-DROP example.o 5bc53d9227...i0 ope6kNBBuUJi6H4NH...
 
 ## Extra domain data
 
-Extra domain related data get validated by this regex expression: `DOMAIN-DATA [a-z\d](?:[a-z\d-]{0,251}[a-z\d])?.o .+`, following the format of `DOMAIN-DATA <DOMAIN> <last extra data inscription id> <data> <signature>`. Further restrictions for domain data records can be applied by the application. 
+Extra domain related data get validated by this regex expression: `DOMAIN-DATA [a-z\d](?:[a-z\d-]{0,251}[a-z\d])?.o .+ \S+`, following the format of `DOMAIN-DATA <DOMAIN> <last extra data inscription id> <data> <signature>`. Further restrictions for domain data records can be applied by the application. 
 
 Some example usage:
 ```
 DOMAIN-DATA example.o 5bc53d9227...i0 extra data is present here ope6kNBBuUJi6H4NH...
-
 DOMAIN-DATA example.o 5bc53d9227...i0 { "still_valid": true } ope6kNBBuUJi6H4NH...
 
 ```
