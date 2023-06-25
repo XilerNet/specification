@@ -46,7 +46,7 @@ Your domain inscription only defines that you own a domain. No linking to a adde
 
 The records get validated by this REGEX expression: `DNS [a-z\d](?:[a-z\d-]{0,251}[a-z\d])?.o [a-z\d](?:[a-z\d\.-]{1,62}[a-zd])?\. [A-Z]{1,5} [A-Z]{2} \d{1,9} \S+ [a-z\d]{64}i[0-9] \S+`, as you can see. These inscriptions are again case sensive, and restricted. This is to prevent phising attacks within the `.o` domain space. Further validation and restrictions might be applied to the RDATA dependin on the record type. *(eg a A record only allowing a ip, etc)*
 
-This is compliant with the [IETF rfc1034 3.6 Resource Records](https://www.ietf.org/rfc/rfc1034.txt) specification and is extending the [IETF rfc952 ASSUMPTIONS 1](https://www.ietf.org/rfc/rfc952.txt) specification *(compliant qua scheme, just extending the allowed domain length)*. But adding the `DNS <DOMAIN>` prefix for identification and a `<last domain dns inscription id> <signature>` suffix.
+This is compliant with the [IETF rfc1034 3.6 Resource Records](https://www.ietf.org/rfc/rfc1034.txt) specification and is extending the [IETF rfc952 ASSUMPTIONS 1](https://www.ietf.org/rfc/rfc952.txt) specification *(compliant qua scheme, just extending the allowed domain length)*. But adding the `DNS <DOMAIN>` prefix for identification and a `<last inscription id> <signature>` suffix.
 
 Examples of valid subdomains:
 ```
@@ -124,11 +124,10 @@ DOMAIN-DROP example.o 5bc53d9227...i0 ope6kNBBuUJi6H4NH...
 
 ## Extra domain data
 
-Extra domain related data get validated by this regex expression: `DOMAIN-DATA [a-z\d](?:[a-z\d-]{0,251}[a-z\d])?.o .+ \S+`, following the format of `DOMAIN-DATA <DOMAIN> <last extra data inscription id> <data> <signature>`. Further restrictions for domain data records can be applied by the application. 
+Extra domain related data get validated by this regex expression: `DOMAIN-DATA [a-z\d](?:[a-z\d-]{0,251}[a-z\d])?.o .+ [a-z\d]{64}i[0-9] \S+`, following the format of `DOMAIN-DATA <DOMAIN> <data> <last id> <signature>`. Further restrictions for domain data records can be applied by the application. 
 
 Some example usage:
 ```
-DOMAIN-DATA example.o 5bc53d9227...i0 extra data is present here ope6kNBBuUJi6H4NH...
-DOMAIN-DATA example.o 5bc53d9227...i0 { "still_valid": true } ope6kNBBuUJi6H4NH...
-
+DOMAIN-DATA example.o extra data is present here 5bc53d9227...i0 ope6kNBBuUJi6H4NH...
+DOMAIN-DATA example.o { "still_valid": true } 5bc53d9227...i0 ope6kNBBuUJi6H4NH...
 ```
