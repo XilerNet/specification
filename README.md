@@ -72,14 +72,16 @@ DNS invalid.o example. A IN 4700000000 127.0.0.1 5bc53d9227...i0 ope6kNBBuUJi6H4
 DNS invalid.o example. A IN 5100000000 127.0.0.1 5bc53d9227...i0 ope6kNBBuUJi6H4NH...
 ```
 
-## Drop subdomains / DNS records
+## Drop subdomains / DNS records and domains
 
-Invalidate a dns record, does as it says. Prevents the resolver from returning the ip in a round-robin form.
+Invalidate a record, does as it says. Prevents the resolver from returning the ip in a round-robin form.
 
-Its gets validated by this regex expression: `DNS-DROP [a-z\d]{64}i[0-9] \S+` which follows this format: `DNS-DROP <dns inscription id> <signature>`
+Its gets validated by this regex expression: `DROP [a-z\d]{64}i[0-9] \S+` which follows this format: `DROP <inscription id> <signature>`
+
+> NOTE: This record invalidates your domain, this allows you to recover a domain even if you have lost your wallet private key. 
 
 ```
-DNS-DROP 5bc53d9227...i0 ope6kNBBuUJi6H4NH...
+DROP 5bc53d9227...i0 ope6kNBBuUJi6H4NH...
 ```
 
 ## Domain validity
@@ -110,16 +112,6 @@ DOMAIN-VALIDATE-TRANSFER example.o 5bc53d9227...i0 ope6kNBBuUJi6H4NH...
 
 # Set a new validation public key
 DOMAIN-VALIDATE-TRANSFER example.o dilithium5 5bc53d9227...i0 1m8jUVZEffs/rP3Osiz... ope6kNBBuUJi6H4NH...
-```
-
-## Drop a domain
-
-> NOTE: This record invalidates your domain, this allows you to recover a domain even if you have lost your wallet private key. 
-
-The drop regex expression: `DOMAIN-DROP [a-z\d](?:[a-z\d-]{0,251}[a-z\d])?.o [a-z\d]{64}i[0-9] \S+` following the format: `DOMAIN-DROP <domain> <domain inscription id> <signature>` 
-
-```
-DOMAIN-DROP example.o 5bc53d9227...i0 ope6kNBBuUJi6H4NH...
 ```
 
 ## Extra domain data
