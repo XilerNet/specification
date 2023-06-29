@@ -8,6 +8,8 @@ A project aimed to create a usable domain name system on bitcoin ordinals. This 
 
 > NOTE: When using chained inscriptions while registering a domain, only a `DOMAIN` and a `DOMAIN-VALIDITY` are allowed to be present. If such an inscription gets transfered the validity will be invalidated.
 
+> NOTE: When no signature is required, the value `null` must be used. If this is not present the inscription will be seen as invalid.
+
 ## Domain Inscription
 
 The domains are validated by this REGEX expression: `DOMAIN [a-z\d](?:[a-z\d-]{0,251}[a-z\d])?.o \d+`, following the structure: `DOMAIN <NAME>.o <valid from unix epoch>`.
