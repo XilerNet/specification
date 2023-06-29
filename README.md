@@ -6,6 +6,8 @@ A project aimed to create a usable domain name system on bitcoin ordinals. This 
 
 > NOTE: All queries can be chained by using a newline character *(`\n`)*, if the queries are chained, the signature can be of the whole chained data, so it only needs to be provided once at the end. If you are registering a domain, and you want to add a validation pk, you can do this directly in the chained inscription and can directly sign that with the signature.
 
+> NOTE: When using chained inscriptions while registering a domain, only a `DOMAIN` and a `DOMAIN-VALIDITY` are allowed to be present. If such an inscription gets transfered the validity will be invalidated.
+
 ## Domain Inscription
 
 The domains are validated by this REGEX expression: `DOMAIN [a-z\d](?:[a-z\d-]{0,251}[a-z\d])?.o \d+`, following the structure: `DOMAIN <NAME>.o <valid from unix epoch>`.
