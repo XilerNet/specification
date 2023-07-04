@@ -46,6 +46,8 @@ If there are multiple records with the same domain name, the first one will be u
 
 ## Subdomains / DNS records
 
+> NOTE: Root DNS records should be defined as `@.`
+
 Your domain inscription only defines that you own a domain. No linking to a addess or record has been made here, as this would prevent you from making any change in the future. The solution to this is to create an extra inscription and check if the walled which owns the DNS inscription also owns the first and valid domain. 
 
 The records get validated by this REGEX expression: `DNS [a-z\d](?:[a-z\d-]{0,251}[a-z\d])?.o [a-z\d](?:[a-z\d\.-]{1,62}[a-zd])?\. [A-Z]{1,5} [A-Z]{2} \d{1,9} \S+ [a-z\d]{64}i[0-9] \S+`, as you can see. These inscriptions are again case sensive, and restricted. This is to prevent phising attacks within the `.o` domain space. Further validation and restrictions might be applied to the RDATA dependin on the record type. *(eg a A record only allowing a ip, etc)*
